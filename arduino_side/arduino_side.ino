@@ -1,13 +1,17 @@
 //arduino side
 #include <SoftwareSerial.h>
+
+
 SoftwareSerial s(10,11);//rx,tx
-SoftwareSerial s2(12,13);
-String content;
+//SoftwareSerial s2(12,13);
 int data;
-int data2;
+int velocity;
+char data2[6];
+char data3[1];
+int command;
 void setup() {
 s.begin(115200);
-s2.begin(115200);
+//s2.begin(115200);
 Serial.begin(9600);
 }
  
@@ -16,19 +20,22 @@ void loop() {
 
   s.listen();
   delay(2);
-   if(s.available()>0)
+  int i =0;
+   while(s.available()>0)
   {
-    data=s.read();
-    Serial.println(data);
-  }
-  s2.listen();
-  delay(2);
-  if(s2.available()>0)
-  {
-    data2=s2.read();
-    Serial.println(data2);
-  }
-  
+    data2[i]=s.read();
+    i++;
+    
+    if(s.available()==0){
+   data = atoi(data2);
+   command = data%10;
+   
+   Serial.println(data);
+   data=0;
+  for(int i = 0;i<6;i++){
+    data2[i]=0;
+    }
+      }
 
- 
+  }
 }

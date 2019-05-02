@@ -5,7 +5,7 @@
 
 
 SoftwareSerial s(D6,D5);
-SoftwareSerial s2(D4,D3);
+//SoftwareSerial s2(D4,D3);
 
 // Update these with values suitable for your network.
 const char* ssid = "NikolaTesla";
@@ -48,48 +48,55 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  //mengubah payload menjadi int
-  payload[length] = '\0';
-  String a = String((char*)payload);
-  int i= a.toInt();
+
+//mengubah payload menjadi int
+//  payload[length] = '\0';
+//  String a = String((char*)payload);
+//  int i= a.toInt();
+
    //posisi servo1
   if (strcmp(topic,"majuw")==0) {
-  s.write(1);
-  delay(2);
-  s2.write(i);
-  Serial.println(i);
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("10");//hash untuk dimodulo, kode: 10 = maju, 11= mundur, 12= kiri, 13=kanan, 14= stop
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
-  
+
   else if (strcmp(topic,"mundurs")==0) {
-  s.write(2);
-  delay(2);
-  s2.write(i);
-  Serial.println(i);
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("11");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"kiria")==0) {
-  s.write(3);
-  delay(2);
-  s2.write(i);
-  Serial.println(i);
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("12");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"kanand")==0) {
-  s.write(4);
-  delay(2);
-  s2.write(i);
-  Serial.println(i);
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("13");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"stopsss")==0) {
-  s.write(5);
-  delay(2);
-  s2.write(i);
-  Serial.println(i);
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("14");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   
@@ -128,7 +135,7 @@ void reconnect() {
 void setup() {
   Serial.begin(9600);
   s.begin(115200);
-  s2.begin(115200);
+//  s2.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);

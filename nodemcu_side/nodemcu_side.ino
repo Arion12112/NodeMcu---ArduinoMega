@@ -99,6 +99,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   
+  else if (strcmp(topic,"servobar1")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("15");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+  else if (strcmp(topic,"servobar2")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("16");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+  else if (strcmp(topic,"servobar3")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("17");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+  
 }
 
 void reconnect() {
@@ -119,6 +146,9 @@ void reconnect() {
       client.subscribe("kanand");
       client.subscribe("kiria");
       client.subscribe("stopsss");
+      client.subscribe("servobar1");
+      client.subscribe("servobar2");
+      client.subscribe("servobar3");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

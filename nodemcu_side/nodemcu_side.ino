@@ -5,7 +5,6 @@
 
 
 SoftwareSerial s(D6,D5);
-//SoftwareSerial s2(D4,D3);
 
 // Update these with values suitable for your network.
 const char* ssid = "NikolaTesla";

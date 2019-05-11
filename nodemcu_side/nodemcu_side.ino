@@ -162,7 +162,7 @@ void reconnect() {
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   s.begin(115200);
 //  s2.begin(115200);
   setup_wifi();

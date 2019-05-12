@@ -13,12 +13,14 @@ int angle;
 int velocity;
 char data2[6];
 int command;
+int ENB = A0;
+int ENA = A1;
 int IN1 = 16;
 int IN2 = 5;
 int IN3 = 4;
 int IN4 = 0;
 int pin;
-int servoNum = 12;
+int servoNum = 11;
 char inputCommand ;         // a string to hold incoming data
 boolean inputComplete = false;
 
@@ -29,7 +31,7 @@ void setup()
 s.begin(115200);
 Serial.begin(115200);
 myservo.begin();
-myservo.setVelocity(150);
+myservo.setVelocity(300);
 }
  
 void loop() 
@@ -52,7 +54,8 @@ void loop()
   //menerima topic dari pesan yang dikirim oleh nodemcu
    command = data%10;
   //menerima message dari pesan yang dikirim oleh nodemcu
-   velocity = angle = floor(data/100);
+   angle = floor(data/100)+58;
+   velocity = floor(data/100);
    
    Serial.print("command : "); 
    Serial.println(command);
@@ -80,10 +83,10 @@ Serial.print("Your command is: "); Serial.println(inputCommand); Serial.println(
 }
 
 void servoCommand(){
-  if(command == 0){maju();analogWrite(pin, velocity);}
-    else if(command == 1){mundur();analogWrite(pin, velocity);}
-    else if(command == 2){kiri();analogWrite(pin, velocity);}
-    else if(command == 3){kanan();analogWrite(pin, velocity);}
+    if(command == 0){maju();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+    else if(command == 1){mundur();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+    else if(command == 2){kiri();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+    else if(command == 3){kanan();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
     else if(command == 4){stops();}
     else if(command == 5){myservo.write(10, angle);}
     else if(command == 6){myservo.write(11, angle);}

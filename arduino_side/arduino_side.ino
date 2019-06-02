@@ -2,7 +2,9 @@
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include<ServoCds55.h>
+#include<Servo.h>
 ServoCds55 myservo;
+Servo myservo2;
 
 //pilih sesuai dengan board yang dipakai
 //SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
@@ -13,14 +15,14 @@ int angle;
 int velocity;
 char data2[6];
 int command;
-int ENB = A0;
-int ENA = A1;
-int IN1 = 16;
-int IN2 = 5;
-int IN3 = 4;
-int IN4 = 0;
+int ENB = A0; //Analog PIN ENA
+int ENA = A1; //Analog PIN ENB
+int IN1 = 16; //Motor kanan
+int IN2 = 3; //Motor kanan
+int IN3 = 4; //Motor kiri
+int IN4 = 0; //Motor kiri
 int pin;
-int servoNum = 11;
+int servoNum = 14;
 char inputCommand ;         // a string to hold incoming data
 boolean inputComplete = false;
 
@@ -30,8 +32,9 @@ void setup()
 //mulai koneksi s ke nodemcu dengan baud rate 115200
 s.begin(115200);
 Serial.begin(115200);
+myservo2.attach(9);
 myservo.begin();
-myservo.setVelocity(300);
+myservo.setVelocity(25);
 }
  
 void loop() 
@@ -88,9 +91,9 @@ void servoCommand(){
     else if(command == 2){kiri();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
     else if(command == 3){kanan();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
     else if(command == 4){stops();}
-    else if(command == 5){myservo.write(10, angle);}
-    else if(command == 6){myservo.write(11, angle);}
-    else if(command == 7){myservo.write(12, angle);}
+    else if(command == 5){myservo.write(10, angle);}//sudut 154
+    else if(command == 6){myservo.write(11, angle);}//sudut 148
+    else if(command == 7){myservo.write(14, angle);}//sudut 102
   }
 
 void serialEvent() {
@@ -108,6 +111,17 @@ void controlServo(char val) {
   
   
   switch (val) {
+    case 'h': //default servo
+     
+      myservo.write(10,154);
+      delay(200);
+      myservo.write(11,148);
+      delay(200);
+      myservo.write(14,102);
+      delay(200);
+      
+      break;
+      
     case 'p':
       myservo.write(254, 300);
       myservo.write(52, 300);
@@ -138,6 +152,12 @@ void controlServo(char val) {
       break;
     case 'v':
       myservo.setVelocity(100);// set velocity to 100(range:0-300) in Servo mode
+      break;
+       case '1':
+      myservo2.write(0);// buka
+      break;
+       case '2':
+      myservo2.write(87);//tutup
       break;
     case 'm':
       myservo.rotate(servoNum, 150); //   Anti CW    ID:1  Velocity: 150_middle velocity  300_max
@@ -206,4 +226,10 @@ digitalWrite(IN1,LOW);
 digitalWrite(IN2,LOW);
 digitalWrite(IN3,LOW);
 digitalWrite(IN4,LOW);
+myservo.write(10,154);
+delay(200);
+myservo.write(11,148);
+delay(200);
+myservo.write(14,102);
+delay(200);
 }

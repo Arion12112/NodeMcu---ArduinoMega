@@ -16,6 +16,16 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+/* define L298N or L293D motor control pins */
+int leftMotorForward = 2;     /* GPIO2(D4) -> IN3   */
+int rightMotorForward = 15;   /* GPIO15(D8) -> IN1  */
+int leftMotorBackward = 0;    /* GPIO0(D3) -> IN4   */
+int rightMotorBackward = 13;  /* GPIO13(D7) -> IN2  */
+
+
+/* define L298N or L293D enable pins */
+int rightMotorENB = 14; /* GPIO14(D5) -> Motor-A Enable */
+int leftMotorENB = 12;  /* GPIO12(D6) -> Motor-B Enable */
 
 void setup_wifi() { 
 
@@ -49,54 +59,62 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
 //mengubah payload menjadi int
-//  payload[length] = '\0';
-//  String a = String((char*)payload);
-//  int i= a.toInt();
+  payload[length] = '\0';
+  String a = String((char*)payload);
+  int i= a.toInt();
 
    //posisi servo1
   if (strcmp(topic,"majuw")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
+  MotorForward();
+  analogWrite(leftMotorENB,i);
+  analogWrite(rightMotorENB,i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
   }
-  s.write("10");//hash untuk dimodulo, kode: 10 = maju, 11= mundur, 12= kiri, 13=kanan, 14= stop
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
+//  s.write("10");//hash untuk dimodulo, kode: 10 = maju, 11= mundur, 12= kiri, 13=kanan, 14= stop
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+//  }
 
   else if (strcmp(topic,"mundurs")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("11");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
+    MotorBackward(); 
+     analogWrite(leftMotorENB,i);
+  analogWrite(rightMotorENB,i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("11");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"kiria")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("12");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
+   TurnLeft();  
+  analogWrite(leftMotorENB,i);
+  analogWrite(rightMotorENB,i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("12");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"kanand")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("13");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
+     TurnRight();
+      analogWrite(leftMotorENB,i);
+  analogWrite(rightMotorENB,i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
   else if (strcmp(topic,"stopsss")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("14");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
+     MotorStop();
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("14");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   
   else if (strcmp(topic,"servobar1")==0) {
@@ -168,6 +186,15 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+  /* initialize motor control pins as output */
+  pinMode(leftMotorForward, OUTPUT);
+  pinMode(rightMotorForward, OUTPUT); 
+  pinMode(leftMotorBackward, OUTPUT);  
+  pinMode(rightMotorBackward, OUTPUT);
+
+  /* initialize motor enable pins as output */
+  pinMode(leftMotorENB, OUTPUT); 
+  pinMode(rightMotorENB, OUTPUT);
 }
  
 void loop() {
@@ -180,4 +207,54 @@ if (!client.connected()) {
 //{
 // s.write(data);
 //}
+}
+
+void MotorForward(void)   
+{
+  
+  digitalWrite(leftMotorForward,HIGH);
+  digitalWrite(rightMotorForward,HIGH);
+  digitalWrite(leftMotorBackward,LOW);
+  digitalWrite(rightMotorBackward,LOW);
+}
+
+/********************************************* BACKWARD *****************************************************/
+void MotorBackward(void)   
+{
+  
+  digitalWrite(leftMotorBackward,HIGH);
+  digitalWrite(rightMotorBackward,HIGH);
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(rightMotorForward,LOW);
+}
+
+/********************************************* TURN LEFT *****************************************************/
+void TurnLeft(void)   
+{
+  
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(rightMotorForward,HIGH);
+  digitalWrite(rightMotorBackward,LOW);
+  digitalWrite(leftMotorBackward,HIGH);  
+}
+
+/********************************************* TURN RIGHT *****************************************************/
+void TurnRight(void)   
+{
+ 
+  digitalWrite(leftMotorForward,HIGH);
+  digitalWrite(rightMotorForward,LOW);
+  digitalWrite(rightMotorBackward,HIGH);
+  digitalWrite(leftMotorBackward,LOW);
+}
+
+/********************************************* STOP *****************************************************/
+void MotorStop(void)   
+{
+  digitalWrite(leftMotorENB,LOW);
+  digitalWrite(rightMotorENB,LOW);
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(leftMotorBackward,LOW);
+  digitalWrite(rightMotorForward,LOW);
+  digitalWrite(rightMotorBackward,LOW);
 }

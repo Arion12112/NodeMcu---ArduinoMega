@@ -15,12 +15,12 @@ int angle;
 int velocity;
 char data2[6];
 int command;
-int ENB = A0; //Analog PIN ENA
-int ENA = A1; //Analog PIN ENB
-int IN1 = 16; //Motor kanan
-int IN2 = 3; //Motor kanan
-int IN3 = 4; //Motor kiri
-int IN4 = 0; //Motor kiri
+//int ENB = A0; //Analog PIN ENA
+//int ENA = A1; //Analog PIN ENB
+//int IN1 = 16; //Motor kanan
+//int IN2 = 3; //Motor kanan
+//int IN3 = 4; //Motor kiri
+//int IN4 = 0; //Motor kiri
 int pin;
 int servoNum = 14;
 char inputCommand ;         // a string to hold incoming data
@@ -86,12 +86,12 @@ Serial.print("Your command is: "); Serial.println(inputCommand); Serial.println(
 }
 
 void servoCommand(){
-    if(command == 0){maju();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
-    else if(command == 1){mundur();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
-    else if(command == 2){kiri();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
-    else if(command == 3){kanan();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
-    else if(command == 4){stops();}
-    else if(command == 5){myservo.write(10, angle);}//sudut 154
+//    if(command == 0){maju();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+//    else if(command == 1){mundur();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+//    else if(command == 2){kiri();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+//    else if(command == 3){kanan();analogWrite(ENA, velocity);analogWrite(ENB, velocity);}
+//    else if(command == 4){stops();}
+     if(command == 5){myservo.write(10, angle);}//sudut 154
     else if(command == 6){myservo.write(11, angle);}//sudut 148
     else if(command == 7){myservo.write(14, angle);}//sudut 102
   }
@@ -189,47 +189,4 @@ void controlServo(char val) {
       Serial.println("  Motor mode: m_Rotate; v_Set velocity.");
       Serial.println("  Others: r_Reset servo to factory settings; i_Change servo ID."); Serial.println("");
   }
-}
-
-
-void maju(){
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);  
-}
-
-
-void mundur(){
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-}
-
-void kiri(){
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-}
-
-void kanan(){
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-}
-
-void stops(){
-digitalWrite(IN1,LOW);
-digitalWrite(IN2,LOW);
-digitalWrite(IN3,LOW);
-digitalWrite(IN4,LOW);
-myservo.write(10,154);
-delay(200);
-myservo.write(11,148);
-delay(200);
-myservo.write(14,102);
-delay(200);
 }

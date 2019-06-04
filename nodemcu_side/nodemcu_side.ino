@@ -66,8 +66,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
    //posisi servo1
   if (strcmp(topic,"majuw")==0) {
   MotorForward();
-  analogWrite(leftMotorENB,i);
-  analogWrite(rightMotorENB,i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
   }
@@ -77,8 +75,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   else if (strcmp(topic,"mundurs")==0) {
     MotorBackward(); 
-     analogWrite(leftMotorENB,i);
-  analogWrite(rightMotorENB,i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
 //  }
@@ -88,8 +84,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   else if (strcmp(topic,"kiria")==0) {
    TurnLeft();  
-  analogWrite(leftMotorENB,i);
-  analogWrite(rightMotorENB,i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
 //  }
@@ -99,8 +93,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   else if (strcmp(topic,"kanand")==0) {
      TurnRight();
-      analogWrite(leftMotorENB,i);
-  analogWrite(rightMotorENB,i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
 //  }
@@ -211,7 +203,8 @@ if (!client.connected()) {
 
 void MotorForward(void)   
 {
-  
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,HIGH);
   digitalWrite(leftMotorForward,HIGH);
   digitalWrite(rightMotorForward,HIGH);
   digitalWrite(leftMotorBackward,LOW);
@@ -221,7 +214,8 @@ void MotorForward(void)
 /********************************************* BACKWARD *****************************************************/
 void MotorBackward(void)   
 {
-  
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,HIGH);
   digitalWrite(leftMotorBackward,HIGH);
   digitalWrite(rightMotorBackward,HIGH);
   digitalWrite(leftMotorForward,LOW);
@@ -231,7 +225,8 @@ void MotorBackward(void)
 /********************************************* TURN LEFT *****************************************************/
 void TurnLeft(void)   
 {
-  
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,HIGH); 
   digitalWrite(leftMotorForward,LOW);
   digitalWrite(rightMotorForward,HIGH);
   digitalWrite(rightMotorBackward,LOW);
@@ -241,7 +236,8 @@ void TurnLeft(void)
 /********************************************* TURN RIGHT *****************************************************/
 void TurnRight(void)   
 {
- 
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,HIGH);
   digitalWrite(leftMotorForward,HIGH);
   digitalWrite(rightMotorForward,LOW);
   digitalWrite(rightMotorBackward,HIGH);

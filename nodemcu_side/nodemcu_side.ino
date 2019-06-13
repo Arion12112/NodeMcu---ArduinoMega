@@ -100,6 +100,43 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
+  
+  else if (strcmp(topic,"diag1")==0) {
+     Diag1();
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+  else if (strcmp(topic,"diag2")==0) {
+     Diag2();
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+  else if (strcmp(topic,"diag3")==0) {
+     Diag3();
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+  else if (strcmp(topic,"diag4")==0) {
+     Diag4();
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
   else if (strcmp(topic,"stopsss")==0) {
      MotorStop();
 //  for (int i = 0; i < length; i++) {
@@ -135,6 +172,31 @@ void callback(char* topic, byte* payload, unsigned int length) {
   s.write("17");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
+
+  else if (strcmp(topic,"grip")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("10");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+  else if (strcmp(topic,"cutter")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("11");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+  else if (strcmp(topic,"defarmpos")==0) {
+     
+  for (int i = 0; i < length; i++) {
+    s.write((char)payload[i]);
+  }
+  s.write("12");
+  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
   
 }
 
@@ -159,12 +221,20 @@ void reconnect() {
       client.subscribe("servobar1");
       client.subscribe("servobar2");
       client.subscribe("servobar3");
+      client.subscribe("grip");
+      client.subscribe("cutter");
+      client.subscribe("defarmpos");
+      client.subscribe("diag1");
+      client.subscribe("diag2");
+      client.subscribe("diag3");
+      client.subscribe("diag4");    
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
+      MotorStop();
     }
   }
 }
@@ -243,6 +313,48 @@ void TurnRight(void)
   digitalWrite(rightMotorBackward,HIGH);
   digitalWrite(leftMotorBackward,LOW);
 }
+
+void Diag1(void)
+{
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,LOW);
+  digitalWrite(leftMotorForward,HIGH);
+  digitalWrite(rightMotorForward,LOW);
+  digitalWrite(rightMotorBackward,LOW);
+  digitalWrite(leftMotorBackward,LOW);
+}
+
+void Diag2(void)
+{ 
+  digitalWrite(leftMotorENB,HIGH);
+  digitalWrite(rightMotorENB,LOW);
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(rightMotorForward,LOW);
+  digitalWrite(rightMotorBackward,LOW);
+  digitalWrite(leftMotorBackward,HIGH);
+}
+
+void Diag3(void)
+{
+  digitalWrite(leftMotorENB,LOW);
+  digitalWrite(rightMotorENB,HIGH);
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(rightMotorForward,LOW);
+  digitalWrite(rightMotorBackward,HIGH);
+  digitalWrite(leftMotorBackward,LOW);
+}
+
+void Diag4(void)
+{ 
+  digitalWrite(leftMotorENB,LOW);
+  digitalWrite(rightMotorENB,HIGH);
+  digitalWrite(leftMotorForward,LOW);
+  digitalWrite(rightMotorForward,HIGH);
+  digitalWrite(rightMotorBackward,LOW);
+  digitalWrite(leftMotorBackward,LOW);
+}
+
+
 
 /********************************************* STOP *****************************************************/
 void MotorStop(void)   

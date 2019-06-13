@@ -5,6 +5,7 @@
 #include<Servo.h>
 ServoCds55 myservo;
 Servo myservo2;
+Servo myservo3;
 
 //pilih sesuai dengan board yang dipakai
 //SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
@@ -94,6 +95,9 @@ void servoCommand(){
      if(command == 5){myservo.write(10, angle);}//sudut 154
     else if(command == 6){myservo.write(11, angle);}//sudut 148
     else if(command == 7){myservo.write(14, angle);}//sudut 102
+    else if(command == 0){Grip(angle);}//sudut 102 //grip
+    else if(command == 1){Cutter(angle);}//sudut 102 //cutter
+    else if(command == 2){myservo.write(10, 0); myservo.write(11, 0); myservo.write(14, 0);}//sudut 102 //default arm position  
   }
 
 void serialEvent() {
@@ -105,6 +109,16 @@ void serialEvent() {
     }
     inputCommand += inChar;
   }
+}
+
+void Grip(int a){
+  if (a == 1) myservo2.write(0);// buka
+  else myservo2.write(87);// tutup
+}
+
+void Cutter(int a){
+   if (a == 1) myservo2.write(0);// diam
+  else myservo2.write(180);// potong
 }
 
 void controlServo(char val) {

@@ -33,9 +33,10 @@ void setup()
 //mulai koneksi s ke nodemcu dengan baud rate 115200
 s.begin(115200);
 Serial.begin(115200);
-myservo2.attach(9);
+myservo2.attach(5);
+myservo3.attach(6);
 myservo.begin();
-myservo.setVelocity(25);
+myservo.setVelocity(35);
 }
  
 void loop() 

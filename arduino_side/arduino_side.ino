@@ -97,7 +97,7 @@ void servoCommand(){
     else if(command == 7){myservo.write(14, angle);}//sudut 102
     else if(command == 0){Grip(angle);}//sudut 102 //grip
     else if(command == 1){Cutter(angle);}//sudut 102 //cutter
-    else if(command == 2){myservo.write(10, 0); myservo.write(11, 0); myservo.write(14, 0);}//sudut 102 //default arm position  
+    else if(command == 2){myservo.write(10, 154); myservo.write(11, 148); myservo.write(14, 102);}//sudut 102 //default arm position  
   }
 
 void serialEvent() {

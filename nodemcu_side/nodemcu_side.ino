@@ -7,9 +7,9 @@
 SoftwareSerial s(D2,D1);
 
 // Update these with values suitable for your network.
-const char* ssid = "RYANDARREN";
-const char* password = "87654321";
-const char* mqtt_server = "192.168.100.10";
+const char* ssid = "NikolaTesla";
+const char* password = "123456778";
+const char* mqtt_server = "iot.eclipse.org";
 
 WiFiClient espClient;
 PubSubClient client(espClient);

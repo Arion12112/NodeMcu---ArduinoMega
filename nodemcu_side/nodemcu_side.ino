@@ -64,7 +64,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   int i= a.toInt();
 
    //posisi servo1
-  if (strcmp(topic,"majuw")==0) {
+  if (strcmp(topic,"majuww")==0) {
   MotorForward();
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
@@ -73,7 +73,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
 //  }
 
-  else if (strcmp(topic,"mundurs")==0) {
+  else if (strcmp(topic,"mundurss")==0) {
     MotorBackward(); 
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
@@ -82,7 +82,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-  else if (strcmp(topic,"kiria")==0) {
+  else if (strcmp(topic,"kiriaa")==0) {
    TurnLeft();  
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
@@ -91,7 +91,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-  else if (strcmp(topic,"kanand")==0) {
+  else if (strcmp(topic,"kanandd")==0) {
      TurnRight();
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
@@ -137,7 +137,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-  else if (strcmp(topic,"stopsss")==0) {
+  else if (strcmp(topic,"stopss")==0) {
      MotorStop();
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);

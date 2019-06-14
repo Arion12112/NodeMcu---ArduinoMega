@@ -113,13 +113,13 @@ void serialEvent() {
 }
 
 void Grip(int a){
-  if (a == 1) myservo2.write(0);// buka
-  else myservo2.write(87);// tutup
+  if (a == 1) myservo2.write(87);// tutup
+  else myservo2.write(0);// buka
 }
 
 void Cutter(int a){
    if (a == 1) myservo2.write(0);// diam
-  else myservo2.write(180);// potong
+  else myservo2.write(90);// potong
 }
 
 void controlServo(char val) {

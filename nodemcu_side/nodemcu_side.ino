@@ -178,7 +178,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   for (int i = 0; i < length; i++) {
     s.write((char)payload[i]);
   }
-  s.write("10");
+  s.write("13");
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   else if (strcmp(topic,"cutter")==0) {

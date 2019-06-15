@@ -8,8 +8,8 @@ Servo myservo2;
 Servo myservo3;
 
 //pilih sesuai dengan board yang dipakai
-SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
-//SoftwareSerial s(5,6); //rx, tx; untuk arduino uno
+//SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
+SoftwareSerial s(5,6); //rx, tx; untuk arduino uno
 //deklarasi variabel dan pin
 int data;
 int angle;
@@ -33,8 +33,8 @@ void setup()
 //mulai koneksi s ke nodemcu dengan baud rate 115200
 s.begin(115200);
 Serial.begin(115200);
-myservo2.attach(5);
-myservo3.attach(6);
+myservo2.attach(10);
+myservo3.attach(11);
 myservo.begin();
 myservo.setVelocity(35);
 }
@@ -96,8 +96,11 @@ void servoCommand(){
      if(command == 5){myservo.write(10, angle);}//sudut 154
     else if(command == 6){myservo.write(11, angle);}//sudut 148
     else if(command == 7){myservo.write(14, angle);}//sudut 102
-    else if(command == 0){Grip(angle);}//sudut 102 //grip
-    else if(command == 1){Cutter(angle);}//sudut 102 //cutter
+    else if(command == 3){Grip(angle); 
+    }//sudut 102 //grip
+    else if(command == 1){Cutter(angle);
+    
+    }//sudut 102 //cutter
     else if(command == 2){myservo.write(10, 154); myservo.write(11, 148); myservo.write(14, 102);}//sudut 102 //default arm position  
   }
 
@@ -113,12 +116,12 @@ void serialEvent() {
 }
 
 void Grip(int a){
-  if (a == 1) myservo2.write(87);// tutup
+  if (a == 59) {myservo2.write(87);Serial.println("grip");}// tutup
   else myservo2.write(0);// buka
 }
 
 void Cutter(int a){
-   if (a == 1) myservo3.write(0);// diam
+   if (a == 59) myservo3.write(0);// diam
   else myservo3.write(90);// potong
 }
 

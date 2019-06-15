@@ -213,11 +213,11 @@ void reconnect() {
       // Once connected, publish an announcement...
       //client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("majuw");
-      client.subscribe("mundurs");
-      client.subscribe("kanand");
-      client.subscribe("kiria");
-      client.subscribe("stopsss");
+      client.subscribe("majuww");
+      client.subscribe("mundurss");
+      client.subscribe("kanandd");
+      client.subscribe("kiriaa");
+      client.subscribe("stopss");
       client.subscribe("servobar1");
       client.subscribe("servobar2");
       client.subscribe("servobar3");

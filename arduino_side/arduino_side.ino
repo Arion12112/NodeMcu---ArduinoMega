@@ -8,8 +8,8 @@ Servo myservo2;
 Servo myservo3;
 
 //pilih sesuai dengan board yang dipakai
-//SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
-SoftwareSerial s(5,6); //rx, tx; untuk arduino uno
+SoftwareSerial s(10,11);//rx,tx ;untuk arduino mega
+//SoftwareSerial s(5,6); //rx, tx; untuk arduino uno
 //deklarasi variabel dan pin
 int data;
 int angle;
@@ -118,8 +118,8 @@ void Grip(int a){
 }
 
 void Cutter(int a){
-   if (a == 1) myservo2.write(0);// diam
-  else myservo2.write(90);// potong
+   if (a == 1) myservo3.write(0);// diam
+  else myservo3.write(90);// potong
 }
 
 void controlServo(char val) {

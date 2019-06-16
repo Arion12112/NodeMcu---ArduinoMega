@@ -13,6 +13,7 @@ SoftwareSerial s(5,6); //rx, tx; untuk arduino uno
 //deklarasi variabel dan pin
 int data;
 int angle;
+int angle2;
 int velocity;
 char data2[6];
 int command;
@@ -60,6 +61,7 @@ void loop()
    command = data%10;
   //menerima message dari pesan yang dikirim oleh nodemcu
    angle = floor(data/100)+58;
+   angle2 = floor(data/100);
    velocity = floor(data/100);
    
    Serial.print("command : "); 
@@ -96,11 +98,8 @@ void servoCommand(){
      if(command == 5){myservo.write(10, angle);}//sudut 154
     else if(command == 6){myservo.write(11, angle);}//sudut 148
     else if(command == 7){myservo.write(14, angle);}//sudut 102
-    else if(command == 3){Grip(angle); 
-    }//sudut 102 //grip
-    else if(command == 1){Cutter(angle);
-    
-    }//sudut 102 //cutter
+    else if(command == 3){Grip(angle2);}//grip
+    else if(command == 1){Cutter(angle2);}//cutter
     else if(command == 2){myservo.write(10, 154); myservo.write(11, 148); myservo.write(14, 102);}//sudut 102 //default arm position  
   }
 
@@ -115,15 +114,7 @@ void serialEvent() {
   }
 }
 
-void Grip(int a){
-  if (a == 59) {myservo2.write(87);Serial.println("grip");}// tutup
-  else myservo2.write(0);// buka
-}
 
-void Cutter(int a){
-   if (a == 59) myservo3.write(0);// diam
-  else myservo3.write(90);// potong
-}
 
 void controlServo(char val) {
   
@@ -168,16 +159,16 @@ void controlServo(char val) {
       Serial.println("ok");
       //ID:1  Pos:0  velocity:150
       break;
-    case 'v':
-      myservo.setVelocity(100);// set velocity to 100(range:0-300) in Servo mode
-      break;
-       case '1':
-      myservo2.write(0);// buka
-      break;
-       case '2':
-      myservo2.write(87);//tutup
-      break;
-    case 'm':
+//    case 'v':
+//      myservo.setVelocity(100);// set velocity to 100(range:0-300) in Servo mode
+//      break;
+//       case '1':
+//      myservo2.write(0);// buka
+//      break;
+//       case '2':
+//     // myservo2.write(87);//tutup
+//      break;
+      case 'm':
       myservo.rotate(servoNum, 150); //   Anti CW    ID:1  Velocity: 150_middle velocity  300_max
       delay(2000);
       myservo.rotate(servoNum, -150); //  CW     ID:1  Velocity: -150_middle velocity  -300_max
@@ -207,4 +198,14 @@ void controlServo(char val) {
       Serial.println("  Motor mode: m_Rotate; v_Set velocity.");
       Serial.println("  Others: r_Reset servo to factory settings; i_Change servo ID."); Serial.println("");
   }
+}
+
+void Grip(int a){
+  if (a == 1) {myservo2.write(87);}// tutup
+  else if(a==0) myservo2.write(0);// buka
+}
+
+void Cutter(int a){
+   if (a == 1) myservo3.write(0);// diam
+  else if(a==0) myservo3.write(90);// potong
 }

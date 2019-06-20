@@ -2,6 +2,7 @@
 #include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <Servo.h>
 
 
 SoftwareSerial s(D2,D1);
@@ -9,7 +10,7 @@ SoftwareSerial s(D2,D1);
 // Update these with values suitable for your network.
 const char* ssid = "NikolaTesla";
 const char* password = "123456778";
-const char* mqtt_server = "iot.eclipse.org";
+const char* mqtt_server = "192.168.43.47";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -27,6 +28,7 @@ int rightMotorBackward = 13;  /* GPIO13(D7) -> IN2  */
 int rightMotorENB = 14; /* GPIO14(D5) -> Motor-A Enable */
 int leftMotorENB = 12;  /* GPIO12(D6) -> Motor-B Enable */
 
+Servo servo;
 void setup_wifi() { 
 
   delay(10);
@@ -136,7 +138,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //  s.write("13");
 //  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
-
+  
+ else if (strcmp(topic,"grip")==0) {
+     if(i == 0)
+     servo.write(80);
+     else if(i == 1) servo.write(10);
+    
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+//  yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+  
   else if (strcmp(topic,"stopss")==0) {
      MotorStop();
 //  for (int i = 0; i < length; i++) {
@@ -173,22 +187,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-  else if (strcmp(topic,"grip")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("13");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
-  else if (strcmp(topic,"cutter")==0) {
-     
-  for (int i = 0; i < length; i++) {
-    s.write((char)payload[i]);
-  }
-  s.write("11");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
+ 
   else if (strcmp(topic,"defarmpos")==0) {
      
   for (int i = 0; i < length; i++) {
@@ -257,6 +256,9 @@ void setup() {
   /* initialize motor enable pins as output */
   pinMode(leftMotorENB, OUTPUT); 
   pinMode(rightMotorENB, OUTPUT);
+
+  //servo
+  servo.attach(16);
 }
  
 void loop() {
@@ -271,7 +273,7 @@ if (!client.connected()) {
 //}
 }
 
-void MotorForward(void)   
+void MotorBackward(void)   
 {
   digitalWrite(leftMotorENB,HIGH);
   digitalWrite(rightMotorENB,HIGH);
@@ -282,7 +284,7 @@ void MotorForward(void)
 }
 
 /********************************************* BACKWARD *****************************************************/
-void MotorBackward(void)   
+void MotorForward(void)   
 {
   digitalWrite(leftMotorENB,HIGH);
   digitalWrite(rightMotorENB,HIGH);
@@ -314,7 +316,7 @@ void TurnRight(void)
   digitalWrite(leftMotorBackward,LOW);
 }
 
-void Diag1(void)
+void Diag3(void)
 {
   digitalWrite(leftMotorENB,HIGH);
   digitalWrite(rightMotorENB,LOW);
@@ -324,7 +326,7 @@ void Diag1(void)
   digitalWrite(leftMotorBackward,LOW);
 }
 
-void Diag2(void)
+void Diag4(void)
 { 
   digitalWrite(leftMotorENB,HIGH);
   digitalWrite(rightMotorENB,LOW);
@@ -334,7 +336,7 @@ void Diag2(void)
   digitalWrite(leftMotorBackward,HIGH);
 }
 
-void Diag3(void)
+void Diag1(void)
 {
   digitalWrite(leftMotorENB,LOW);
   digitalWrite(rightMotorENB,HIGH);
@@ -344,7 +346,7 @@ void Diag3(void)
   digitalWrite(leftMotorBackward,LOW);
 }
 
-void Diag4(void)
+void Diag2(void)
 { 
   digitalWrite(leftMotorENB,LOW);
   digitalWrite(rightMotorENB,HIGH);

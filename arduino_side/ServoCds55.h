@@ -20,7 +20,7 @@ class ServoCds55
 {
 public:
     ServoCds55(int CS=10);
-	void begin();
+  void begin();
     void WritePos(int ID,int Pos);
     void write(int ID,int Pos);
     void setVelocity(int velocity);
@@ -39,6 +39,3 @@ private:
 };
 
 #endif
-
-
-

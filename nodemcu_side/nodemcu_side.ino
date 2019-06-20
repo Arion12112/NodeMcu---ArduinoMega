@@ -221,7 +221,6 @@ void reconnect() {
       client.subscribe("servobar2");
       client.subscribe("servobar3");
       client.subscribe("grip");
-      client.subscribe("cutter");
       client.subscribe("defarmpos");
       client.subscribe("diag1");
       client.subscribe("diag2");

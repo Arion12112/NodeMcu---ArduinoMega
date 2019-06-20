@@ -68,10 +68,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     
  if (strcmp(topic,"cutter")==0) {
-     if(i == 0)
-     servo.write(80);
-     else if(i == 1) servo.write(10);
-    
+    servo.write(90-i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
 //  }

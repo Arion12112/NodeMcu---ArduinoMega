@@ -1,11 +1,11 @@
 //nodemcu side
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <Servo.h>
 
 
-SoftwareSerial s(D2,D1);
+//SoftwareSerial s(D2,D1);
 
 // Update these with values suitable for your network.
 const char* ssid = "NikolaTesla";
@@ -17,19 +17,22 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+int pinServo1 = 15; //D8
+int pinServo2 = 13; //D7
+int pinServo3 = 12; //D6
+int pinServo4 = 14; //D5
+int pinServo5 = 2; //D4
+int pinServo6 = 0; //D3
 /* define L298N or L293D motor control pins */
-int leftMotorForward = 2;     /* GPIO2(D4) -> IN3   */
-int rightMotorForward = 15;   /* GPIO15(D8) -> IN1  */
-int leftMotorBackward = 0;    /* GPIO0(D3) -> IN4   */
-int rightMotorBackward = 13;  /* GPIO13(D7) -> IN2  */
-int pinOut = 2;
 
 
-/* define L298N or L293D enable pins */
-int rightMotorENB = 14; /* GPIO14(D5) -> Motor-A Enable */
-int leftMotorENB = 12;  /* GPIO12(D6) -> Motor-B Enable */
+Servo servo1;
+Servo servo2;
+Servo servo3;
+Servo servo4;
+Servo servo5;
+Servo servo6;
 
-Servo servo;
 void setup_wifi() { 
 
   delay(10);
@@ -66,9 +69,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   String a = String((char*)payload);
   int i= a.toInt();
 
-    
- if (strcmp(topic,"cutter")==0) {
-    servo.write(90-i);
+ //adjuster servo
+ if (strcmp(topic,"ak1")==0) {
+    servo1.write(i);
 //  for (int i = 0; i < length; i++) {
 //    s.write((char)payload[i]);
 //  }
@@ -76,11 +79,43 @@ void callback(char* topic, byte* payload, unsigned int length) {
  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-//pemanas
-  else if (strcmp(topic,"pemanas")==0){
+   else if (strcmp(topic,"aka1")==0) {
+    servo2.write(i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+ yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+   else if (strcmp(topic,"ada")==0) {
+    servo3.write(i);
+//  for (int i = 0; i < length; i++) {
+//    s.write((char)payload[i]);
+//  }
+//  s.write("13");
+ yield();//prevent wdt reset or esp8266 crash in blocking code
+  }
+
+//grip
+  else if (strcmp(topic,"capitki")==0){
     if(i == 1)
-     digitalWrite(pinOut, LOW);
-     else if(i == 0)  digitalWrite(pinOut, HIGH);
+     servo4.write(90);
+     else if(i == 0)  servo4.write(25);
+     yield();//prevent wdt reset or esp8266 crash in blocking code
+    }
+
+    else if (strcmp(topic,"capitka")==0){
+    if(i == 1)
+     servo5.write(90);
+     else if(i == 0)  servo5.write(25);
+     yield();//prevent wdt reset or esp8266 crash in blocking code
+    }
+
+    else if (strcmp(topic,"capitda")==0){
+    if(i == 1)
+     servo6.write(90);
+     else if(i == 0)  servo6.write(25);
      yield();//prevent wdt reset or esp8266 crash in blocking code
     }
   
@@ -99,8 +134,12 @@ void reconnect() {
       // Once connected, publish an announcement...
       //client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("cutter");
-      client.subscribe("pemanas");
+      client.subscribe("ak1");
+      client.subscribe("aka1");
+      client.subscribe("ada");
+      client.subscribe("capitki");
+      client.subscribe("capitka");
+      client.subscribe("capitda");
       
     } else {
       Serial.print("failed, rc=");
@@ -116,25 +155,20 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
-  s.begin(115200);
+//  s.begin(115200);
 //  s2.begin(115200);
   setup_wifi();
-  digitalWrite(pinOut, HIGH);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-  /* initialize motor control pins as output */
-  pinMode(leftMotorForward, OUTPUT);
-  pinMode(rightMotorForward, OUTPUT); 
-  pinMode(leftMotorBackward, OUTPUT);  
-  pinMode(rightMotorBackward, OUTPUT);
 
-  /* initialize motor enable pins as output */
-  pinMode(leftMotorENB, OUTPUT); 
-  pinMode(rightMotorENB, OUTPUT);
 
   //servo
-  servo.attach(16);
-  pinMode(14, OUTPUT);
+  servo1.attach(pinServo1);
+  servo2.attach(pinServo2);
+  servo3.attach(pinServo3);
+  servo4.attach(pinServo4);
+  servo5.attach(pinServo5);
+  servo6.attach(pinServo6);
 }
  
 void loop() {

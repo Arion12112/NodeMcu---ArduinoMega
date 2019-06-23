@@ -28,8 +28,13 @@ int rightMotorBackward = 13;  /* GPIO13(D7) -> IN2  */
 int rightMotorENB = 14; /* GPIO14(D5) -> Motor-A Enable */
 int leftMotorENB = 12;  /* GPIO12(D6) -> Motor-B Enable */
 
+int pinOut = 5; // D1
+
+int pinServo = 16; //D0
+
 Servo servo;
-Servo servo2;
+
+
 void setup_wifi() { 
 
   delay(10);
@@ -107,19 +112,19 @@ yield();
  yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   
- else if (strcmp(topic,"grip")==0) {
-     if(i == 0)
-     servo.write(90);
-     else if(i == 1) servo.write(0);
+ else if (strcmp(topic,"cutter")==0) {
+    // if(i == 0)
+     servo.write(i);
+    // else if(i == 1) servo.write(0);
     
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
 
-  else if (strcmp(topic,"cutter")==0) {
-     if(i == 0)
-     servo2.write(30);
-     else if(i == 1) servo2.write(0);
-    
+  else if (strcmp(topic,"pemanas")==0) {
+      if(i == 1)
+     digitalWrite(pinOut, LOW);
+     else if(i == 0)  digitalWrite(pinOut, HIGH);
+     yield();//prevent wdt reset or esp8266 crash in blocking code
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
   
@@ -127,44 +132,7 @@ yield();
      MotorStop();
   yield();//prevent wdt reset or esp8266 crash in blocking code
   }
-  
-  else if (strcmp(topic,"servobar1")==0) {
-//     
-//  for (int i = 0; i < length; i++) {
-//    s.write((char)payload[i]);
-//  }
-//  s.write("15");
-//  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
-
-  else if (strcmp(topic,"servobar2")==0) {
-     
-//  for (int i = 0; i < length; i++) {
-//    //s.write((char)payload[i]);
-//  }
-//  s.write("16");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
-
-  else if (strcmp(topic,"servobar3")==0) {
-     
-//  for (int i = 0; i < length; i++) {
-//    s.write((char)payload[i]);
-//  }
-  //s.write("17");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
-
- 
-  else if (strcmp(topic,"defarmpos")==0) {
-     
-  //for (int i = 0; i < length; i++) {
-//    s.write((char)payload[i]);
-  //}
-//  s.write("12");
-  yield();//prevent wdt reset or esp8266 crash in blocking code
-  }
-  
+    
 }
 
 void reconnect() {
@@ -185,12 +153,8 @@ void reconnect() {
       client.subscribe("kanandd");
       client.subscribe("kiriaa");
       client.subscribe("stopss");
-      client.subscribe("servobar1");
-      client.subscribe("servobar2");
-      client.subscribe("servobar3");
-      client.subscribe("grip");
+      client.subscribe("pemanas");
       client.subscribe("cutter");
-      client.subscribe("defarmpos");
       client.subscribe("diag1");
       client.subscribe("diag2");
       client.subscribe("diag3");
@@ -225,9 +189,13 @@ void setup() {
   pinMode(leftMotorENB, OUTPUT); 
   pinMode(rightMotorENB, OUTPUT);
 
+  
   //servo
-  servo.attach(16);
-  servo2.attach(5);
+  servo.attach(pinServo);
+  
+  pinMode(pinOut, OUTPUT);
+  digitalWrite(pinOut, HIGH);
+
 }
  
 void loop() {
